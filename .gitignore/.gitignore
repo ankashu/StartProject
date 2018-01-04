@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+  <body>
+    <div class="container">
+
+      <h3 class="align:center"> Rate Plan Details </h3>
+
+    <div id="displayTable"></div>
+
+    <div>
+      <button type="button" class="btn btn-danger" onClick="deleteSelected()">Delete</button>
+    </div>
+    </div>
+
+  <body>
+    <script>
+    var rates = [];
+
+      $('document').ready(function(){
+        showRates();
+        defaultValueChecked();
+      });
+
+
+    rates.push({
+      "rateName" : "abc",
+      "value" : "temp",
+      "rate1" : 10,
+      "rate2"  : 20
+    });
+    rates.push({
+      "rateName" : "xyz",
+      "value" : "default",
+      "rate1" : 10,
+      "rate2"  : 20
+    });
+    rates.push({
+      "rateName" : "pqr",
+      "value" : "temp",
+      "rate1" : 10,
+      "rate2"  : 20
+    });
+    rates.push({
+      "rateName" : "stu",
+      "value" : "temp",
+      "rate1" : 10,
+      "rate2"  : 20
+    });
+
+  function showRates(){
+      $('#displayTable').replaceWith('<div id="displayTable"></div>');
+          var table = $('<table class = "table table-bordered" style="width:60%"/>').appendTo($('#displayTable'));
+          $('<tr/>').appendTo($('<thead/>').appendTo(table))
+    	    .append($('<th><input type="checkbox" id="checkbox_all" onclick="selectAll()"></th>'))
+    		  .append($('<th/>').text("Rate Name"))
+    	    .append($('<th/>').text("Rate1"))
+          .append($('<th/>').text("Rate2"))
+      $(rates).each(function(i, result) {
+          var tr= $('<tr id="tr_'+result.rateName+'">');
+          tr.append($('<td><input type="checkbox" id="checkbox_'+result.rateName+'"></td>'))
+    	    tr.append($('<td><label>'+result.rateName+'</label></td>'))
+          tr.append($('<td><input type="radio" name="optradio" id="rate1_'+result.rateName+'" onclick="changeColor(this.id)"></td>'))
+          tr.append($('<td><input type="radio" name="optradio" id="rate2_'+result.rateName+'" onclick="changeColor(this.id)"></td>'))
+          tr.append('</tr>')
+          tr.appendTo(table);
+    	});
+      defaultValueColored();
+}
+
+  function changeColor(idString){
+    removeAllColors();
+    var id = idString.split("_");
+    $("#tr_"+id[1]).addClass('success');
+  }
+
+  function deleteRow(idString){
+    var id = idString.split("_");
+    rates.splice(rates.findIndex(x => x.rateName == id[1] && x.value != 'default'),1);
+    showRates();
+  }
+
+  function removeAllColors(){
+    $(rates).each(function(i, result) {
+      if (result.value != "default") {
+        $("#tr_"+result.rateName).removeAttr("class");
+      }
+    });
+  }
+
+  function selectAll(){
+    if ($("#checkbox_all").is(":checked")) {
+        $(':checkbox').attr('checked', true);
+    } else if (!$("#checkbox_all").is(":checked")) {
+      $(':checkbox').attr('checked', false);
+    }
+  }
+
+  function remove(idString){
+    var id = idString.split("_");
+    $(rates).each(function(i, result) {
+      if (result.value != "default" && result.rateName == id[1]) {
+        $("#"+idString).closest('tr').remove();
+      }
+    });
+  }
+
+  function deleteSelected() {
+    $(':checkbox').each(function(i, temp) {
+      if($(this).is(":checked")){
+        remove(temp.id);
+      }
+    });
+  }
+
+  function defaultValueChecked() {
+    $(rates).each(function(i, result) {
+      if (result.value == "default") {
+        $('#rate1_'+result.rateName).attr('checked', true);
+      }
+    });
+  }
+
+  function defaultValueColored() {
+    $(rates).each(function(i, result) {
+      if (result.value == "default") {
+        $('#tr_'+result.rateName).addClass('info');
+      }
+    });
+  }
+
+
+
+    </script>
+</html>
